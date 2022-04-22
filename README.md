@@ -3,7 +3,7 @@ this is 4 riccardo
 
 
 ## First meaning
-**THIS IS NOT WHAT WE'RE DOING ACTUALLY**
+**THIS IS NOT WHAT WE'RE DOING ACTUALLY**  
 Is a simplification. 
 The agent choses between two options, which have a constant underlying reward probability.
 Reward probabilities for the two options ("choices") add up to 1 – if option 1 has reward probability of 0.8, then option two has rp of 0.2.
@@ -22,15 +22,15 @@ The agents estimates a value (expectation on the next trial), based on last choi
 We are interested in the number of trials needed for the agent to learn the underlying reward probability.
 That is simply, at which trial number does reward probability equal agent's value.
 
-  Dictionary:
-  ----------
-  
-  value : expectation on the next trial 
-  theta : probability of chosing option 1, modified by tau 
-  tau : temperature (explore X exploit bias)
-  alpha : learning rate (impact of prediction error on value)
+    Dictionary:
+    ----------
+
+    value : expectation on the next trial 
+    theta : probability of chosing option 1, modified by tau 
+    tau : temperature (explore X exploit bias)
+    alpha : learning rate (impact of prediction error on value)
   
   
 ## Second meaning
-**THIS IS WHAT WE'RE DOING**
+**THIS IS WHAT WE'RE DOING**  
 From the environment (trial, choice, feedback, condition, etc.) reconstruct an agents ALPHA & TAU!
