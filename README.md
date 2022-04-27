@@ -8,7 +8,7 @@ These two choices have constant and proportional reward probabilities (e.g. if `
 The agent implicitly learns these reward probabilities by attributing values to the two choices;
 Value, or expectation of reward on next trial if choice c is picked, is updated each trial following:
 
-<img src="http://www.sciweavers.org/tex2img.php?eq=V_%7Bt%2B1%7D%5E%7Bc%7D%20%3D%20V%5E%7Bc%7D_%7Bt%7D%20%2B%20%5Calpha%20%28R_t%20-%20V%5E%7Bc%7D_%7Bt%7D%29&bc=White&fc=Black&im=png&fs=12&ff=arev&edit=0" align="center" border="0" alt="V_{t+1}^{c} = V^{c}_{t} + \alpha (R_t - V^{c}_{t})" width="186" height="25" />
+![eq1](https://latex.codecogs.com/svg.image?V_{t&plus;1}^{c}&space;=&space;V^{c}_{t}&space;&plus;&space;\alpha&space;(R_t&space;-&space;V^{c}_{t}))
 <!--$$ V_{t+1}^{c} = V^{c}_{t} + \alpha (R_t - V^{c}_{t}) $$--> 
 
 where t is trial number, alpha is the learning rate and R is whether reward was achieved or not.
@@ -17,7 +17,8 @@ A high learning rate pushes an agent to update value in bigger increments.
 
 An agent reaches a choice following:
 
-<img src="http://www.sciweavers.org/tex2img.php?eq=Choice%20%5Csim%20Binomial%281%2C%20~%5Csigma%28V_%7Bt%7D%5E%7Bc2%7D%20-%20V_%7Bt%7D%5E%7Bc1%7D%2C%20%5Ctau%29%29&bc=White&fc=Black&im=png&fs=12&ff=arev&edit=0" align="center" border="0" alt="Choice \sim Binomial(1, ~\sigma(V_{t}^{c2} - V_{t}^{c1}, \tau))" width="319" height="25" /><!--$$ Choice ~ Binomial(1, \sigma(V_{t}^{c2} - V_{t}^{c1}, \tau)) $$-->
+![eq2](https://latex.codecogs.com/svg.image?Choice&space;\sim&space;Binomial(1,&space;~\sigma(V_{t}^{c2}&space;-&space;V_{t}^{c1},&space;\tau)))
+<!--$$ Choice ~ Binomial(1, \sigma(V_{t}^{c2} - V_{t}^{c1}, \tau)) $$-->
 
 where sigma is a softmax function, with temperature tau. 
 Temperature is the "exponentiality" of the softmax function (see figure bellow).
