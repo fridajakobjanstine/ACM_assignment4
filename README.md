@@ -9,7 +9,7 @@ The agent implicitly learns these reward probabilities by attributing values to 
 Value, or expectation of reward on next trial if choice c is picked, is updated each trial following:
 
 <img src="https://render.githubusercontent.com/render/math?math=V_{t+1}^{c} = V^{c}_{t} + \alpha (R_t - V^{c}_{t})">
-[//]: $$ V_{t+1}^{c} = V^{c}_{t} + \alpha (R_t - V^{c}_{t}) $$
+[//]: $$ V_{t+1}^{c} = V^{c}_{t} + \alpha (R_t - V^{c}_{t}) $$  
 
 where t is trial number, alpha is the learning rate and R is whether reward was achieved or not.
 Learning rate serves to weight prediction error.
@@ -18,7 +18,7 @@ A high learning rate pushes an agent to update value in bigger increments.
 An agent reaches choice
 
 <img src="https://render.githubusercontent.com/render/math?math=Choice ~ Binomial(1, \sigma(V_{t}^{c2} - V_{t}^{c1}, \tau))">
-[//]: $$ Choice ~ Binomial(1, \sigma(V_{t}^{c2} - V_{t}^{c1}, \tau)) $$
+[//]: $$ Choice ~ Binomial(1, \sigma(V_{t}^{c2} - V_{t}^{c1}, \tau)) $$  
 
 where sigma is a softmax function, with temperature tau. 
 Temperature is the "exponentiality" of the softmax function (see figure bellow).
