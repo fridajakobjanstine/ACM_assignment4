@@ -1,0 +1,45 @@
+---
+title: "Helper_plots"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Packages
+```{r}
+library(pacman)
+p_load(tidyverse, ggsci)
+```
+
+
+Different taus
+```{r}
+
+softmax <- function(x, tau){
+  outcome = 1 / (1 + exp(-tau*x))
+  return(outcome)
+}
+
+
+x_values = seq(-2,2, 0.1)
+taus = seq(0.5,5,0.5)
+
+tau_data <- tibble()
+for (tau in taus){
+  outcome = softmax(x_values, tau)
+  temp = tibble(x=x_values, y = outcome, tau = rep(tau, length(x_values)))
+  tau_data <- rbind(tau_data, temp)
+}
+
+softmaxplot <- tau_data %>% mutate(tau = as.factor(tau)) %>% 
+  ggplot(aes(x,y, color = tau))+
+  geom_line()+
+  theme_bw()+
+  scale_color_d3()+
+  labs(x ="Temperature", y = "Probability of choosing condition 1")
+
+ggsave("softmax_vis.png", softmaxplot, width = 10, height=8)
+```
+
