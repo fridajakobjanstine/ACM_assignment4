@@ -34,3 +34,6 @@ That is simply, at which trial number does reward probability equal agent's valu
 ## Second meaning
 **THIS IS WHAT WE'RE DOING**  
 From the environment (trial, choice, feedback, condition, etc.) reconstruct an agents ALPHA & TAU!
+
+## blabla
+In this assignment, we are implementing a reinforcement learning model. We simulate data from a study in which participants have to choose between two choices in each trial. The simulated study has two conditions with learning rates (_alpha_) of 0.6 and 0.8, respectively, meaning a learning rate difference of 0.2. Both conditions have a temperature of 0.5 (_tau_). These are the parameters we are trying to recover. The learning rate indicates ...... and the temperature ...... blablablabla 
