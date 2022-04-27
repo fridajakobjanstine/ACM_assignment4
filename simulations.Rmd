@@ -1,0 +1,64 @@
+---
+title: "simulations"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Packages
+```{r}
+library(pacman)
+p_load(tidyverse)
+```
+
+
+
+Functions
+```{r}
+softmax <- function(x, tau){
+  outcome = 1 / (1 + exp(-tau*x))
+  return(outcome)
+}
+
+updateValue <- function(value, alpha, choice, feedback){
+  PE <- feedback-value
+  v1 <- value[1] + alpha * (1-choice)*(feedback-value[1])
+  v2 <- value[2] + alpha * (choice)*(feedback-value[2])
+  updatedValue <- c(v1,v2)
+  return(updatedValue)
+}
+
+simulation <- function(alpha, trials, value, tau, p=0.75){
+  reward_roll <- rbinom(trials, 1, p)
+  d <- tibble(trial = 1:trials,
+              true_alpha = rep(alpha, trials),
+              true_tau = rep(tau, trials),
+              choice = rep(NA, trials),
+              feedback = rep(NA, trials),
+              value1 = rep(NA, trials),
+              value2 = rep(NA, trials))
+  for (i in 1:trials){
+    choice <- rbinom(1, 1, softmax(value[2]-value[1], tau))
+    feedback <- ifelse(reward_roll[i]==choice, 1, 0)
+    value <- updateValue(value, alpha, choice, feedback)
+    d$choice[i] <- choice
+    d$value1[i] <- value[1]
+    d$value2[i] <- value[2]
+    d$feedback[i] <- feedback
+  }
+  return(d)
+}
+
+```
+
+Actually simulating
+```{r}
+condition1 <- simulation(alpha=0.6, trials = 10000, value = c(0.5, 0.5), tau=0.5)
+condition2 <- simulation(alpha=0.8, trials = 10000, value = c(0.5, 0.5), tau=0.5)
+
+data <- rbind(condition1, condition2)
+write_csv(data, "simulation_data.csv")
+```
+
