@@ -1,39 +1,37 @@
 # ACM_assignment4
 this is 4 riccardo
 
+## Experimental setup
+In this assignment, we are implementing a reinforcement learning model. 
+We simulate an experiment in which participants pick between two choices in each trial. 
+These two choices have constant and proportional reward probabilities (e.g. if p(choice_1) = 0.8, then p(choice_2) = 0.2). 
+The agent implicitly learns these reward probabilities by attributing values to the two choices;
+Value, or expectation of reward on next trial if choice c is picked, is updated each trial following:
 
-## First meaning
-**THIS IS NOT WHAT WE'RE DOING ACTUALLY**  
-Is a simplification. 
-The agent choses between two options, which have a constant underlying reward probability.
-Reward probabilities for the two options ("choices") add up to 1 – if option 1 has reward probability of 0.8, then option two has rp of 0.2.
+$$ V_{t+1}^{c} = V^{c}_{t} + \alpha (R_t - V^{c}_{t}) $$
 
-We model an agent learning this underlying reward probability.
-Because they are symmetrical, our agent can be assumed to always choose the same option – the agent learns reward probability of option 1 explicitly & of option 2 implicitly.
+where t is trial number, alpha is the learning rate and R is whether reward was achieved or not.
+Learning rate serves to weight prediction error.
+A high learning rate pushes an agent to update value in bigger increments.
 
-During a trial, the agent makes a choice between the two options based on theta – 
-that is which option has higher value (value(option 1) and 1 - value(option 1) ) * temperature. 
-Normalization to make theta a probability included.
+An agent reaches choice
 
-Based on the option picked, the agent gets a reward. 
-If reward is different than expected, prediction error will be high.
+$$ Choice ~ Binomial(1, \sigma(V_{t}^{c2} - V_{t}^{c1}, \tau)) $$
 
-The agents estimates a value (expectation on the next trial), based on last choice modified by learning rate * prediction error.
-We are interested in the number of trials needed for the agent to learn the underlying reward probability.
-That is simply, at which trial number does reward probability equal agent's value.
+where sigma is a softmax function, with temperature tau. 
+Temperature is the "exponentiality" of the softmax function (see figure bellow).
+This parameter can be thought of as agent's explore X exploit bias.
+A high temperature pushes the agent to "exploit", meaning having higher probability to pick the more valued choice.
 
-    Dictionary:
-    ----------
+![softmax_temp](fig/softmax_vis.png)
 
-    value : expectation on the next trial 
-    theta : probability of chosing option 1, modified by tau 
-    tau : temperature (explore X exploit bias)
-    alpha : learning rate (impact of prediction error on value)
-  
-  
-## Second meaning
-**THIS IS WHAT WE'RE DOING**  
-From the environment (trial, choice, feedback, condition, etc.) reconstruct an agents ALPHA & TAU!
 
-## blabla
-In this assignment, we are implementing a reinforcement learning model. We simulate data from a study in which participants have to choose between two choices in each trial. The simulated study has two conditions with learning rates (_alpha_) of 0.6 and 0.8, respectively, meaning a learning rate difference of 0.2. Both conditions have a temperature of 0.5 (_tau_). These are the parameters we are trying to recover. The learning rate indicates ...... and the temperature ...... blablablabla 
+## Parameter recovery model
+We simulate data for two conditions:  
+1) alpha = 0.6  
+2) alpha = 0.8
+
+While having fixed reward probability: p(choice_1) = 0.75 and p(choice_2) = 0.25;
+And fixed temperature of 0.5 (value is non-deterministic in making choice) 
+
+We fit a model on the simulated data, aiming to learn the alpha values used in data generation.
