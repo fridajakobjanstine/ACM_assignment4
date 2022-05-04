@@ -66,7 +66,7 @@ model_sum <- samples$summary()
 
 # Save draws_df
 write.csv(recovery_df, 'dat/recovery_df.csv')
-write.csv(downsampled_draws_df, 'dat/downsampled_draws_df')
+write.csv(downsampled_draws_df, 'dat/downsampled_draws_df.csv')
 
 
 
