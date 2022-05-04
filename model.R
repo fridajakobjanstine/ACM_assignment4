@@ -2,7 +2,7 @@ library(pacman)
 p_load(tidyverse, patchwork, wesanderson, rcartocolor, cmdstanr, brms, posterior)
 
 set_cmdstan_path('/work/cmdstan-2.29.2')
-d <- read.csv('simulation_data.csv')
+d <- read.csv('dat/simulation_data.csv')
 
 # Adding condition column
 for (i in 1:nrow(d)){
@@ -67,8 +67,8 @@ model_sum <- samples$summary()
 # Return model defined priors and posteriors
 
 # Save draws_df
-write.csv(recovery_df, 'recovery_df.csv')
-write.csv(draws_df, 'last_draws_df.csv')
+write.csv(recovery_df, 'dat/recovery_df.csv')
+write.csv(draws_df, 'dat/last_draws_df.csv')
 
 
 
