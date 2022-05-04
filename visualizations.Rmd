@@ -11,12 +11,13 @@ Packages
 ```{r}
 library(pacman)
 p_load(tidyverse, ggsci)
+
+# draws_df = read.csv('draws_df.csv')
 ```
 
 
 Different taus
 ```{r}
-
 softmax <- function(x, tau){
   outcome = 1 / (1 + exp(-tau*x))
   return(outcome)
@@ -41,5 +42,37 @@ softmaxplot <- tau_data %>% mutate(tau = as.factor(tau)) %>%
   labs(x ="Temperature", y = "Probability of choosing condition 1")
 
 ggsave("softmax_vis.png", softmaxplot, width = 10, height=8)
+```
+
+
+Model checks
+```{r}
+# see posterior plots
+
+# prior predictive checks / 
+
+
+# 
+```
+
+
+Alpha estimation development
+```{r}
+recovery_df %>%
+  pivot_longer(cols=c(alpha1_est, alpha2_est)) %>%
+  ggplot(aes(value, color=name)) +
+  geom_density() +
+  facet_wrap(~n_trials)
+
+```
+
+```{r}
+recovery_df %>%
+  filter(n_trials == 100) %>%
+  pivot_longer(cols=c(alpha1_est, alpha2_est)) %>%
+  ggplot(aes(value, color=name)) +
+  geom_density()
+  
+
 ```
 

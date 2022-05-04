@@ -1,6 +1,7 @@
 
 data {
   int<lower=1> trials;
+  int<lower=1> save_every;
   array[trials] int<lower=0, upper=1> condition; 
   array[trials] int<lower=1, upper=2> choice;
   array[trials] int<lower=0, upper=1> feedback;
@@ -48,15 +49,17 @@ generated quantities {
   real<lower=0, upper=1> alpha2_prior;
   real<lower=0, upper=20> tau_prior;
   
-  
-  array[trials] real expected_val1;
-  array[trials] real expected_val2;
-  array[trials] real alpha;
+  // saving every n-th trial, so array is shorter than trials
+  array[trials/save_every] real expected_val1;
+  array[trials/save_every] real expected_val2;
+  // array[trials/save_every] real expected_alpha1;
+  // array[trials/save_every] real expected_alpha2;
   vector[2] theta; 
   real pe;
   
   real log_lik;
   
+  // vector[2] alpha;
   vector[2] value; 
   vector[2] initValueGen;
   initValueGen = rep_vector(0.5, 2);
@@ -69,21 +72,30 @@ generated quantities {
   log_lik = 0;
   
   for (t in 1:trials){
-    theta = softmax(tau * value); //action probability computed via softmax
     
-    log_lik = log_lik + categorical_lpmf(choice[t] | theta);
+    // save every n-th trial
+    if (t / save_every == 0){
+      
+      theta = softmax(tau * value); //action probability computed via softmax
     
-    pe = feedback[t] - value[choice[t]]; //compute pe for chosen value only
-    
-    if (condition[t] == 0)
-      value[choice[t]] = value[choice[t]] + alpha1 * pe; // update chosen V
-    if (condition[t] == 1)
-      value[choice[t]] = value[choice[t]] + alpha2 * pe; // update chosen V
-    expected_val1[t] = value[1]; //Saving this for plotting afterwards
-    expected_val2[t] = value[2]; //Saving this for plotting afterwards
-    
-    // alpha[t] = alpha1 * (1-condition[t]) + alpha2 * (condition[t]);
-    
+      log_lik = log_lik + categorical_lpmf(choice[t] | theta);
+      
+      pe = feedback[t] - value[choice[t]]; //compute pe for chosen value only
+      
+      if (condition[t] == 0)
+        value[choice[t]] = value[choice[t]] + alpha1 * pe; // update chosen V
+      if (condition[t] == 1)
+        value[choice[t]] = value[choice[t]] + alpha2 * pe; // update chosen V
+
+      expected_val1[t] = value[1]; //Saving this for plotting afterwards
+      expected_val2[t] = value[2]; //Saving this for plotting afterwards
+      
+      // alpha[t] = alpha1 * (1-condition[t]) + alpha2 * (condition[t]);
+      // expected_alpha1[t] = alpha[1];
+      // expected_alpha2[t] = alpha[2];
+      
+    }
+
   }
 
 }
