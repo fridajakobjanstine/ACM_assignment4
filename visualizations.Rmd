@@ -43,3 +43,54 @@ softmaxplot <- tau_data %>% mutate(tau = as.factor(tau)) %>%
 ggsave("softmax_vis.png", softmaxplot, width = 10, height=8)
 ```
 
+
+Agent behavior
+
+Load data
+```{r}
+df <- read.csv("simulation_data.csv")
+source("simulations.Rmd")
+extra_cond <- simulation(alpha=0.4, trials = 10000, value = c(0.5, 0.5), tau=0.5)
+df <- rbind(df, extra_cond)
+```
+
+```{r}
+## Define function for plotting (take below and use)
+est_reward <- function(alpha, df){
+  plot <- df %>% 
+        filter(true_alpha==alpha) %>%
+        ggplot()+
+        geom_point(aes(trial, value2), color="darkorange", alpha=0.1)+
+        geom_hline(aes(yintercept = a1_intercept, color="True reward probability"), size=1.1)+
+        geom_smooth(aes(trial, value2, color="Smoothed estimation"))+
+        scale_color_manual(name="",
+                           values=c("darkorange3","black"), 
+                           guide=guide_legend(override.aes = list(color=c("darkorange3","black"))))+
+        labs(x="Trial", y="Agent's estimated reward probability", title = paste("True learning rate =", alpha))+
+        theme_classic()
+  return(plot)
+}
+```
+
+
+Does the agent learn the true probabilities?
+```{r}
+a1_intercept = 0.75
+a2_intercept = 0.25
+rm(plots)
+
+p_04 = est_reward(0.4, df)
+p_06 = est_reward(0.6, df)
+p_08 = est_reward(0.8, df)
+ggsave("fig/alpha_04.png", p_04, width = 10, height=8)
+ggsave("fig/alpha_06.png", p_06, width = 10, height=8)
+ggsave("fig/alpha_08.png", p_08, width = 10, height=8)
+```
+
+
+
+
+
+
+
+
