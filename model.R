@@ -9,7 +9,7 @@ for (i in 1:nrow(d)){
   ifelse(d$true_alph[i] == 0.6, d$condition[i] <- 0, d$condition[i] <- 1)
 }
 
-file <- file.path("model_iterated.stan")
+file <- file.path("model.stan")
 mod <- cmdstan_model(file, cpp_options = list(stan_threads = TRUE), pedantic = TRUE)
 
 
