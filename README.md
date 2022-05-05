@@ -27,14 +27,25 @@ A high temperature pushes the agent to "exploit", meaning having higher probabil
 
 ![softmax_temp](fig/softmax_vis.png)
 
-
-## Parameter recovery model
+## Simulation
 We simulate data for two conditions:  
 1) alpha = 0.6  
 2) alpha = 0.8
 
 While having fixed reward probability: `p(choice_1) = 0.75` and `p(choice_2) = 0.25`;
-And fixed temperature of `
-0.5 (value is non-deterministic in making choice) 
+And fixed temperature `tau = 0.5` (value is non-deterministic in making choice) 
 
-We fit a model on the simulated data, aiming to learn the alpha values used in data generation.
+The agents chooses an option following the decision rule described above, and updates its value of that choice based on the learning rate. Learning rates were set to 0.8 for condition 1, and 0.6 for condition 2. The agent's belief of the reward probability of option 1 under each of the two condition can be seen below:
+
+<img src="fig/alpha_08.png" alt="alpha08" width="600"/>
+<img src="fig/alpha_06.png" alt="alpha06" width="600"/>
+
+Clearly, the agent is updating the expected value of the option too much for both conditions, especially with a learning of 0.8. It is not a problem for the parameter recovery that the agent to such a high degree, but we nevertheless ran a third agent simulation (not used in parameter recovery) where the agent has a learning rate of 0.4 instead to illustrate the effect on reward probability estimation
+
+<img src="fig/alpha_04.png" alt="alpha04" width="600"/>
+
+## Parameter recovery model
+
+We fit a model on the simulated data, aiming to recover the alpha- and tau values used in data generation. In order to estimate the required number of trials to correctly recover the parameters, we fit the model using subsets of the data with fewer trials. That is, we fit the model using only the data from the first n trials, with n = 100, 200, 500, 1000, 2000, 5000. 
+
+NOTE description of model, write some equations
