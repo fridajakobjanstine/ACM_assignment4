@@ -34,7 +34,6 @@ We simulate data for two conditions:
 2) alpha = 0.8
 
 While having fixed reward probability: `p(choice_1) = 0.75` and `p(choice_2) = 0.25`;
-And fixed temperature of `
-0.5 (value is non-deterministic in making choice) 
+And fixed temperature `tau = 0.5` (value is non-deterministic in making choice) 
 
-We fit a model on the simulated data, aiming to learn the alpha values used in data generation.
+We fit a model on the simulated data, aiming to recover the alpha- and tau values used in data generation. In order to estimate the required number of trials to correctly recover the parameters, we fit the model using subsets of the data with fewer trials. That is, we fit the model using only the data from the first n trials, with n = 100, 200, 500, 1000, 2000, 5000. 
