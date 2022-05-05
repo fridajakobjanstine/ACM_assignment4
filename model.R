@@ -29,7 +29,7 @@ recovery_df = NULL
 stopping_n_trials = c(100, 200, 500, 1000, 2000, 5000, 10000, 20000)
 for (i in stopping_n_trials){
   
-  print(paste0('starting n_trials ', i))
+  print(paste0('starting n_trials ', i)) 
   
   # data needs to be sliced, to have both conditions in.
   # fist 10k rows are condition 1 & last 10k are condition 2
