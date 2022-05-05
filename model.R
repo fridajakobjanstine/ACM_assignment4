@@ -87,7 +87,7 @@ write.csv(downsampled_draws_df, 'dat/downsampled_draws_df.csv')
 ### PART 2 ###
 
 # Define session
-trials_per_session = 100
+trials_per_session = 10
 n_sessions = 5
 save_every = 1 
 
