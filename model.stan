@@ -50,9 +50,9 @@ model {
 }
   
 generated quantities {
-  real<lower=0, upper=1> alpha1_prior;
-  real<lower=0, upper=1> alpha2_prior;
-  real<lower=0, upper=20> tau_prior;
+  real alpha1_prior; //<lower=0, upper=1>
+  real alpha2_prior; //<lower=0, upper=1>
+  real tau_prior; //<lower=0, upper=20>
 
   vector[2] theta; 
   real pe;
@@ -105,4 +105,3 @@ generated quantities {
       
   }
 }
-
