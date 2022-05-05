@@ -89,7 +89,7 @@ write.csv(downsampled_draws_df, 'dat/downsampled_draws_df.csv')
 # Define session
 trials_per_session = 10
 n_sessions = 5
-save_every = 1 
+save_every = 1
 
 # Adding initial priors
 alpha1_prior_vals = c(0, 1)
@@ -105,11 +105,11 @@ for (i in 1:n_sessions){
   # fist 10k rows are condition 1 & last 10k are condition 2
   idx_length = ceiling(trials_per_session/2) #round up to nearest integer
   
-  idx_start_c1 = 1 + i*idx_length - idx_length 
-  idx_start_c2 = 10000 + idx_start_c1 
+  idx_start_c1 = 1 + i*idx_length - idx_length #start of slice for cond1
+  idx_start_c2 = 10000 + idx_start_c1 #start of slice for cond2
   
-  idx_end_c1 = i * idx_length
-  idx_end_c2 = 10000 + idx_end_c1
+  idx_end_c1 = i * idx_length #end of slice for cond1
+  idx_end_c2 = 10000 + idx_end_c1 #end of slice for cond2
   
   data <- list(
     trials = trials_per_session,
@@ -154,4 +154,5 @@ for (i in 1:n_sessions){
 }
 
 model_sum <- samples$summary()
+
 
