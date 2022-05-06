@@ -64,3 +64,5 @@ From the figure above, we argue that reasonable estimations of learning rate doe
 To produce an iterated design, we simulate a study in which a participant goes through the trials in different sessions (e.g. 5 session with 20 trials in each). We use the same models as described above, however, to accommodate the iterated study design we use a different approach for setting the priors. The first session is initialized with __XXXXXXXX__ priors. After each session, we save the mean and standard deviation of the estimated alphas and tau. In the next session, these values are then used for the priors for alpha1, alpha2, and tau, assuming normally distributed priors and posteriors. 
 
 By running this on the same simulated data as described above we see that.......
+
+** ANIMATED DENSITY PLOTS ** 
