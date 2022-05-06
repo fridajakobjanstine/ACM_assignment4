@@ -50,10 +50,13 @@ We fit a model on the simulated data, aiming to recover the alpha- and tau value
 
 NOTE description of model, write some equations
 
-
 ** Insert Jans plot - maybe with vertical line at true learning rates? **
 
 From the figure above, we argue that reasonable estimations of learning rate does not happen until around 10000 trials (5000 of each condition). We also notice that estimations of learning rate in condition 2 (`alpha = 0.8`) take form earlier than estimations of learning rate in condition 1 (`alpha = 0.6`). This indicates that higher learning rates are easier to detect, presumably because that leads to a more drastic effect on agent belief and behavior. We would therefore expect that an even higher number of trials would be necessary to recover a learning rate of 0.4. 
+
+** PLOT SHOWING THAT CHAINS WORKED PROPERLY **
+
+** PRIOR/POSTERIOR UPDATE PLOT **
 
 ## Iterated design
 ** comment: updated priors to be normal rather than uniform **   
