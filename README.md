@@ -48,12 +48,22 @@ Clearly, the agent is updating the expected value of the option too much for bot
 
 We fit a model on the simulated data, aiming to recover the alpha- and tau values used in data generation. In order to estimate the required number of trials to correctly recover the parameters, we fit multiple models using subsets of the data of varrying length (stopping after seeing the first n trials from each condition, with n = 50, 100, 250, 500, 1000, 2500, 5000, 10000). 
 
-We use the following model formulation:
+We use the following model formulation:  
 
-![eq3](https://latex.codecogs.com/svg.image?\\Prior_{\alpha}&space;\sim&space;Normal(1,&space;1)&space;\\\alpha_1&space;\sim&space;Normal_{lpdf}(\alpha_1&space;|&space;Prior_{\alpha})&space;\\\alpha_2&space;\sim&space;Normal_{lpdf}(\alpha_2&space;|&space;Prior_{\alpha})&space;\\\\Prior_{\tau}&space;\sim&space;Normal(0,&space;20)&space;\\\tau&space;\sim&space;Normal_{lpdf}(\tau&space;|&space;Prior_{\tau})&space;\\&space;)
+![eq3](https://latex.codecogs.com/svg.image?\\Prior_{\alpha}&space;\sim&space;Normal(1,&space;1)&space;\\\alpha_1&space;\sim&space;Normal_{lpdf}(\alpha_1&space;|&space;Prior_{\alpha})&space;\\\alpha_2&space;\sim&space;Normal_{lpdf}(\alpha_2&space;|&space;Prior_{\alpha})&space;\\\\Prior_{\tau}&space;\sim&space;Normal(0,&space;20)&space;\\\tau&space;\sim&space;Normal_{lpdf}(\tau&space;|&space;Prior_{\tau}))
+<!--$$ V\\
+Prior_{\alpha} \sim Normal(1, 1) \\
+\alpha_1 \sim Normal_{lpdf}(\alpha_1 | Prior_{\alpha}) \\
+\alpha_2 \sim Normal_{lpdf}(\alpha_2 | Prior_{\alpha}) \\
+\\
+Prior_{\tau} \sim Normal(0, 20) \\
+\tau \sim Normal_{lpdf}(\tau | Prior_{\tau}) \\
+$$--> 
 
-Producing the following estimates of alpha over time:
-<img src="fig/alpha_esimates.png" alt="alpha_esimates" width="600"/>
+Producing the following estimates of alpha over time:  
+
+<img src="fig/alpha_estimates.png" alt="alpha_estimates" width="600"/>  
+
 
 From the figure above, we argue that reasonable estimations of learning rate does not happen until around 10000 trials (5000 of each condition). We also notice that estimations of learning rate in condition 2 (`alpha = 0.8`) take form earlier than estimations of learning rate in condition 1 (`alpha = 0.6`). This indicates that higher learning rates are easier to detect, presumably because that leads to a more drastic effect on agent belief and behavior. We would therefore expect that an even higher number of trials would be necessary to recover a learning rate of 0.4. 
 
