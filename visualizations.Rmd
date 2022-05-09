@@ -113,7 +113,7 @@ p_chains_a1 = ggplot(downsampled_draws_df,
        y="  .....",
        color='Chain')
 
-ggsave("fig/chains_a1.png", p_chains, width = 10, height=8)
+ggsave("fig/chains_a1.png", p_chains_a1, width = 10, height=8)
 
 
 p_chains_a2 = ggplot(downsampled_draws_df, 
@@ -127,7 +127,7 @@ p_chains_a2 = ggplot(downsampled_draws_df,
        y="  .....",
        color='Chain')
 
-ggsave("fig/chains_a2.png", p_chains, width = 10, height=8)
+ggsave("fig/chains_a2.png", p_chains_a2, width = 10, height=8)
 ```
 
 
