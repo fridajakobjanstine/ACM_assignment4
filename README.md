@@ -71,10 +71,15 @@ From here, we sample alphas from different model fits, increasing the length of 
 
 From the figure above, we argue that reasonable estimations of learning rate does not happen until around 10000 trials (5000 of each condition). We also notice that estimations of learning rate in condition 2 (`alpha = 0.8`) take form earlier than estimations of learning rate in condition 1 (`alpha = 0.6`). This indicates that higher learning rates are easier to detect, presumably because that leads to a more drastic effect on agent belief and behavior. We would therefore expect that an even higher number of trials would be necessary to recover a learning rate of 0.4. 
 
+## Model quality checks
+#### Markov chains
+Below we visualise trace plots of the Markov chains. We see that the chains are scattered around a mean and that they seem to converge.
 <img src="fig/chains.png" alt="chains" width="600"/>
 
+#### Prior-posterior updates
+![pp update](fig/pp_checks_alpha.png)
+This figure shows prior(red)-posterior(blue) update checks for the the parameters alpha1 and alpha2. The parameters are estimated by the model based on the priors we set. We see that for both alphas, the posterior is quite narrow and certain around the true alpha (blue line) even given the very wide prior. This increases our belief in that the model has been successfully fitted to the data.
 
-** PRIOR/POSTERIOR UPDATE PLOT **
 
 ## Iterated design
 ** comment: updated priors to be normal rather than uniform **   
