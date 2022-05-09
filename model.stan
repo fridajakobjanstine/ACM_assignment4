@@ -29,8 +29,8 @@ model {
   //target += uniform_lpdf(alpha1 | 0,1); // TERRIBLE PRIORS
   //target += uniform_lpdf(alpha2 | 0,1);
   //target += uniform_lpdf(tau | 0,20);
-  target += normal_lpdf(alpha1 | alpha1_prior_vals[1], alpha1_prior_vals[2]); 
-  target += normal_lpdf(alpha2 | alpha2_prior_vals[1], alpha2_prior_vals[2]);
+  target += normal_lpdf(logit(alpha1) | alpha1_prior_vals[1], alpha1_prior_vals[2]); 
+  target += normal_lpdf(logit(alpha2) | alpha2_prior_vals[1], alpha2_prior_vals[2]);
   target += normal_lpdf(tau | tau_prior_vals[1], tau_prior_vals[2]);
   
   value = initValue;

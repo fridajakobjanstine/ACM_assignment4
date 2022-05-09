@@ -12,7 +12,8 @@ Packages
 library(pacman)
 p_load(tidyverse, ggsci)
 
-# draws_df = read.csv('draws_df.csv')
+draws_df = read.csv('dat/downsampled_draws_df.csv')
+recovery_df = read.csv('dat/recovery_df.csv')
 ```
 
 
@@ -100,19 +101,32 @@ Model checks
 
 # prior predictive checks / 
 
+# chains
+p_chains = ggplot(downsampled_draws_df, 
+       aes(.iteration, alpha2, group=factor(.chain),
+           color=factor(.chain))) + 
+  geom_line(alpha=0.85) +
+  scale_colour_manual(values=c("#0D4468","#37AAF6"))+
+  theme_classic() +
+  labs(title="MCMC trace for alpha2", 
+       x='Iterations', 
+       y="  .....",
+       color='Chain')
 
-# 
+ggsave("fig/chains.png", p_chains, width = 10, height=8)
 ```
 
 
 Alpha estimation development
 ```{r}
-recovery_df %>%
+p_recovery = recovery_df %>%
   pivot_longer(cols=c(alpha1_est, alpha2_est)) %>%
   ggplot(aes(value, color=name)) +
   geom_density() +
-  facet_wrap(~n_trials)
+  facet_wrap(~n_trials/2) +
+  theme_classic()
 
+ggsave("fig/alpha_estimates.png", p_recovery, width = 10, height=8)
 ```
 
 ```{r}
