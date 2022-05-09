@@ -50,17 +50,21 @@ We fit a model on the simulated data, aiming to recover the alpha- and tau value
 
 We use the following model formulation:  
 
-![eq3](https://latex.codecogs.com/svg.image?\\Prior_{\alpha}&space;\sim&space;Normal(1,&space;1)&space;\\\alpha_1&space;\sim&space;Normal_{lpdf}(\alpha_1&space;|&space;Prior_{\alpha})&space;\\\alpha_2&space;\sim&space;Normal_{lpdf}(\alpha_2&space;|&space;Prior_{\alpha})&space;\\\\Prior_{\tau}&space;\sim&space;Normal(0,&space;20)&space;\\\tau&space;\sim&space;Normal_{lpdf}(\tau&space;|&space;Prior_{\tau}))
-<!--$$ V\\
-Prior_{\alpha} \sim Normal(1, 1) \\
-\alpha_1 \sim Normal_{lpdf}(\alpha_1 | Prior_{\alpha}) \\
-\alpha_2 \sim Normal_{lpdf}(\alpha_2 | Prior_{\alpha}) \\
-\\
-Prior_{\tau} \sim Normal(0, 20) \\
-\tau \sim Normal_{lpdf}(\tau | Prior_{\tau}) \\
-$$--> 
+![eq3](https://latex.codecogs.com/svg.image?Prior_{\alpha}&space;\sim&space;Normal(1,&space;1))
+<!--$$ Prior_{\alpha} \sim Normal(1, 1) $$--> 
+![eq4](https://latex.codecogs.com/svg.image?\alpha_1&space;\sim&space;Normal_{lpdf}(\alpha_1&space;|&space;Prior_{\alpha}))
+<!--$$ \alpha_1 \sim Normal_{lpdf}(\alpha_1 | Prior_{\alpha}) $$--> 
+![eq5](https://latex.codecogs.com/svg.image?\alpha_2&space;\sim&space;Normal_{lpdf}(\alpha_2&space;|&space;Prior_{\alpha}))
+<!--$$ \alpha_2 \sim Normal_{lpdf}(\alpha_2 | Prior_{\alpha}) $$--> 
 
-Producing the following estimates of alpha over time:  
+![eq6](https://latex.codecogs.com/svg.image?Prior_{\tau}&space;\sim&space;Normal(0,&space;20))
+<!--$$ Prior_{\tau} \sim Normal(0, 20) $$--> 
+![eq7](https://latex.codecogs.com/svg.image?\tau&space;\sim&space;Normal_{lpdf}(\tau&space;|&space;Prior_{\tau}))
+<!--$$ \tau \sim Normal_{lpdf}(\tau | Prior_{\tau}) $$--> 
+
+
+
+From here, we sample alphas from different model fits, increasing the length of data subset (or n trials) over time:  
 
 <img src="fig/alpha_estimates.png" alt="alpha_estimates" width="600"/>  
 
