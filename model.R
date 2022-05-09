@@ -18,8 +18,8 @@ mod <- cmdstan_model(file, cpp_options = list(stan_threads = TRUE), pedantic = T
 
 
 # Adding initial priors
-alpha1_prior_values = c(0, 1)
-alpha2_prior_values = c(0, 1)
+alpha1_prior_values = c(1, 1)
+alpha2_prior_values = c(1, 1)
 tau_prior_values = c(0, 20)
 
 # save only every 100th trail on drawing form samples
@@ -44,9 +44,9 @@ for (i in stopping_n_trials){
     condition = c(d$condition[1:idx_end_c1], d$condition[10001:idx_end_c2]),
     choice = c(d$choice[1:idx_end_c1] + 1, d$choice[10001:idx_end_c2] + 1),
     feedback = c(d$feedback[1:idx_end_c1], d$feedback[10001:idx_end_c2]),
-    alpha1_prior_values = alpha1_prior_values,
-    alpha2_prior_values = alpha2_prior_values,
-    tau_prior_values = tau_prior_values
+    alpha1_prior_vals = alpha1_prior_values,
+    alpha2_prior_vals = alpha2_prior_values,
+    tau_prior_vals = tau_prior_values
   )
   
   samples <- mod$sample(
