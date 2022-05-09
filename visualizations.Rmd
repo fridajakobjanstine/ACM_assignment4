@@ -102,7 +102,21 @@ Model checks
 # prior predictive checks / 
 
 # chains
-p_chains = ggplot(downsampled_draws_df, 
+p_chains_a1 = ggplot(downsampled_draws_df, 
+       aes(.iteration, alpha1, group=factor(.chain),
+           color=factor(.chain))) + 
+  geom_line(alpha=0.85) +
+  scale_colour_manual(values=c("#0D4468","#37AAF6"))+
+  theme_classic() +
+  labs(title="MCMC trace for alpha1", 
+       x='Iterations', 
+       y="  .....",
+       color='Chain')
+
+ggsave("fig/chains_a1.png", p_chains, width = 10, height=8)
+
+
+p_chains_a2 = ggplot(downsampled_draws_df, 
        aes(.iteration, alpha2, group=factor(.chain),
            color=factor(.chain))) + 
   geom_line(alpha=0.85) +
@@ -113,7 +127,7 @@ p_chains = ggplot(downsampled_draws_df,
        y="  .....",
        color='Chain')
 
-ggsave("fig/chains.png", p_chains, width = 10, height=8)
+ggsave("fig/chains_a2.png", p_chains, width = 10, height=8)
 ```
 
 

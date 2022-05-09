@@ -74,7 +74,9 @@ From the figure above, we argue that reasonable estimations of learning rate doe
 ## Model quality checks
 #### Markov chains
 Below we visualise trace plots of the Markov chains. We see that the chains are scattered around a mean and that they seem to converge.
-<img src="fig/chains.png" alt="chains" width="600"/>
+<img src="fig/chains_a1.png" alt="chains" width="600"/>
+<img src="fig/chains_a2.png" alt="chains" width="600"/>
+
 
 #### Prior-posterior updates
 ![pp update](fig/pp_checks_alpha.png)
