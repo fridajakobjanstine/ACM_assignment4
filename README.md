@@ -1,6 +1,8 @@
 # ACM_assignment4
 this is 4 riccardo
 
+# Part 1
+
 ## Experimental setup
 In this assignment, we are implementing a reinforcement learning model. 
 We simulate an experiment in which participants pick between two choices in each trial. 
@@ -46,7 +48,7 @@ Clearly, the agent is updating the expected value of the option too much for bot
 
 ## Parameter recovery model
 
-We fit a model on the simulated data, aiming to recover the alpha- and tau values used in data generation. In order to estimate the required number of trials to correctly recover the parameters, we fit multiple models using subsets of the data of varrying length (stopping after seeing the first n trials from each condition, with n = 50, 100, 250, 500, 1000, 2500, 5000, 10000). 
+We fit a model on the simulated data, aiming to recover the alpha- and tau values used in data generation. In order to estimate the required number of trials to correctly recover the parameters, we fit multiple models using subsets of the data of varying length (stopping after seeing the first n trials from each condition, with n = 50, 100, 250, 500, 1000, 2500, 5000, 10000). 
 
 We use the following model formulation:  
 
@@ -71,6 +73,10 @@ From here, we sample alphas from different model fits, increasing the length of 
 
 From the figure above, we argue that reasonable estimations of learning rate does not happen until around 10000 trials (5000 of each condition). We also notice that estimations of learning rate in condition 2 (`alpha = 0.8`) take form earlier than estimations of learning rate in condition 1 (`alpha = 0.6`). This indicates that higher learning rates are easier to detect, presumably because that leads to a more drastic effect on agent belief and behavior. We would therefore expect that an even higher number of trials would be necessary to recover a learning rate of 0.4. 
 
+Below, we provide the model summary after 10000 trials where we see that the estimates for the two learning rates and the temperature are fairly close to the true values at this point:
+![summary](fig/summary.png)
+
+
 ## Model quality checks
 #### Markov chains
 Below we visualise trace plots of the Markov chains. We see that the chains are scattered around a mean and that they seem to converge.  
@@ -85,9 +91,25 @@ Below we visualise trace plots of the Markov chains. We see that the chains are 
 This figure shows prior(red)-posterior(blue) update checks for the the parameters alpha1 and alpha2. The parameters are estimated by the model based on the priors we set. We see that for both alphas, the posterior is quite narrow and certain around the true alpha (blue line) even given the very wide prior. This increases our belief in that the model has been successfully fitted to the data.
 
 
+## Concerns
+Even though the model quality checks look okay, we have a few concerns about the results we get from our analysis. 10000 trials seem like a very large number needed to successfully recover the parameters. This is also not a feasible amount of trials to expect a participant to go through in an experimental setting. We suspect that we have made some bad assumptions or errors in our modeling. We tried with different priors and found the chosen ones to make most sense. We also experimented with transformations to and from log-odds space. In the plots below, we have tried using inv_logit on the parameters and priors (as seen in the model_invlogit.stan script). This, however, seems to yield less certain posteriors and worse estimates for alpha1 (0.43) and tau (0.12), whereas alpha2 is ok (0.76). The priors also look concerning in the prior-posterior updates, which might explain parts of why the alpha1 estimates are bad. In general, we have some difficulties conceptualizing when it makes sense to transform the parameters and were wondering if you had any feedback or general tips on transformations and log-odds.
+
+![alpha_estimates invlogit](fig/fig/alpha_estimates_invlogit.png)
+![pp update invlogit](fig/pp_checks_alpha_invlogit.png)
+
+
+
+# Part 2
+
 ## Iterated design
 To produce an iterated design, we simulate a study in which a participant goes through the trials in different sessions (e.g. 5 session with 20 trials in each). We use the same models as described above, however, to accommodate the iterated study design we use a different approach for setting the priors. The first session is initialized with the same priors as outlined earlier. After each session, we save the mean and standard deviation of the estimated alphas and tau. In the next session, these values are then used for the priors for alpha1, alpha2, and tau, assuming normally distributed priors and posteriors. 
 
-By running this on the same simulated data as described above we see that.......
+By running this on the same simulated data as described above we see that....... 
+
+** COMMENT ON TRADE-OFF BETWEEN N_TRIALS AND N_SESSIONS **
 
 ** ANIMATED DENSITY PLOTS ** 
+
+
+With this approach, we are assuming that there is no variance across sessions for the participant, i.e. that the values for alpha and tau remain fixed between sessions. In a real-life experimental study, one could expect the participant to not remember the exact values he/she has assigned to each choice in the last session upon beginning the next session. For simplicity, our model does not take this into account. However, for future studies some noise could have been added between sessions to circumvent this.
+

@@ -36,15 +36,15 @@ model {
   value = initValue;
   
   for (t in 1:trials){
-    theta = softmax(tau * value); //action probability computed via softmax
+    theta = softmax(inv_logit(tau) * value); //action probability computed via softmax
     target += categorical_lpmf(choice[t] | theta);
     
     pe = feedback[t] - value[choice[t]]; //compute pe for chosen value only
     
     if (condition[t] == 0)
-      value[choice[t]] = value[choice[t]] + alpha1 * pe; // update chosen V
+      value[choice[t]] = value[choice[t]] + inv_logit(alpha1) * pe; // update chosen V
     if (condition[t] == 1)
-      value[choice[t]] = value[choice[t]] + alpha2 * pe; // update chosen V
+      value[choice[t]] = value[choice[t]] + inv_logit(alpha2) * pe; // update chosen V
     
   }
 }
@@ -72,25 +72,25 @@ generated quantities {
   //alpha1_prior = uniform_rng(0,1);
   //alpha2_prior = uniform_rng(0,1);
   //tau_prior = uniform_rng(0,20);  
-  alpha1_prior = normal_rng(alpha1_prior_vals[1],alpha1_prior_vals[2]);
-  alpha2_prior = normal_rng(alpha2_prior_vals[1],alpha2_prior_vals[2]);
-  tau_prior = normal_rng(tau_prior_vals[1],tau_prior_vals[2]);
+  alpha1_prior = inv_logit(normal_rng(alpha1_prior_vals[1],alpha1_prior_vals[2]));
+  alpha2_prior = inv_logit(normal_rng(alpha2_prior_vals[1],alpha2_prior_vals[2]));
+  tau_prior = inv_logit(normal_rng(tau_prior_vals[1],tau_prior_vals[2]));
   
   value = initValueGen;
   log_lik = 0;
   
   for (t in 1:trials){
       
-    theta = softmax(tau * value); //action probability computed via softmax
+    theta = softmax(inv_logit(tau) * value); //action probability computed via softmax
       
     log_lik = log_lik + categorical_lpmf(choice[t] | theta);
         
     pe = feedback[t] - value[choice[t]]; //compute pe for chosen value only
         
     if (condition[t] == 0)
-      value[choice[t]] = value[choice[t]] + alpha1 * pe; // update chosen V
+      value[choice[t]] = value[choice[t]] + inv_logit(alpha1) * pe; // update chosen V
     if (condition[t] == 1)
-      value[choice[t]] = value[choice[t]] + alpha2 * pe; // update chosen V
+      value[choice[t]] = value[choice[t]] + inv_logit(alpha2) * pe; // update chosen V
 
     // save only every n-th trial
     if (t % save_every == 0){

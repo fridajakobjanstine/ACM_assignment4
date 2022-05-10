@@ -152,3 +152,37 @@ recovery_df %>%
   
 
 ```
+
+Prior/posterior updates
+```{r}
+dd <- read.csv("dat/downsampled_draws_df.csv")
+dd <- downsampled_draws_df
+pp_1 <- dd %>% ggplot() +
+  geom_density(aes(alpha1), fill="blue", alpha=0.3)+
+  geom_density(aes(alpha1_prior), fill="red", alpha=0.3)+
+  geom_vline(xintercept = 0.6, 
+                color = "blue", size=0.75) +
+  labs(x="Alpha", y="Density", title = "Prior posterior update for alpha 1")+
+  theme_classic()
+
+pp_2 <- dd %>% ggplot() +
+  geom_density(aes(alpha2), fill="blue", alpha=0.3)+
+  geom_density(aes(alpha2_prior), fill="red", alpha=0.3)+
+  geom_vline(xintercept = 0.8, 
+                color = "blue", size=0.75) +
+  labs(x="Alpha", y="Density", title = "Prior posterior update for alpha 2")+
+  theme_classic()
+
+pp_3 <- dd %>% ggplot() +
+  geom_density(aes(tau), fill="blue", alpha=0.3)+
+  geom_density(aes(tau_prior), fill="red", alpha=0.3)+
+  labs(x="Alpha", y="Density", title = "Prior posterior update for tau")+
+  theme_classic()
+
+
+pp_checks <- pp_1 + pp_2
+
+ggsave("fig/pp_checks_alpha.png", pp_checks, width = 14, height=8)
+
+```
+
