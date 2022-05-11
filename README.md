@@ -94,7 +94,6 @@ This figure shows prior(red)-posterior(blue) update checks for the the parameter
 ## Concerns
 We have a few concerns about the results we get from our analysis. 10000 trials seem like a very large number needed to successfully recover the parameters. This is also not a feasible amount of trials to expect a participant to go through in an experimental setting. We suspect that we have made some bad assumptions or errors in our modeling. We tried with different priors and found the chosen ones to make most sense. We also experimented with transformations to and from log-odds space. In the plots below, we have tried using inv_logit on the parameters and priors (as seen in the model_invlogit.stan script). This, however, seems to yield less certain posteriors and worse estimates for alpha1 (0.43) and tau (0.12), whereas alpha2 is ok (0.76). The priors also look concerning in the prior-posterior updates, which might explain parts of why the alpha1 estimates are bad. In general, we have some difficulties conceptualizing when it makes sense to transform the parameters and were wondering if you had any feedback or general tips on transformations and log-odds.
 
-![alpha_estimates invlogit](fig/alpha_estimates_invlogit.png)
 ![pp update invlogit](fig/pp_checks_alpha_invlogit.png)
 
 
