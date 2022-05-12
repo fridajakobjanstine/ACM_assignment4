@@ -4,9 +4,9 @@ this is 4 riccardo
 # Part 1
 
 ## Experimental setup
-In this assignment, we are implementing a reinforcement learning model. 
-We simulate an experiment in which participants pick between two choices in each trial. 
-These two choices have constant and proportional reward probabilities (e.g. if `p(choice_1) = 0.8`, then `p(choice_2) = 0.2`). 
+In this assignment, we are implementing a reinforcement learning model reflecting a simple task of choosing between two options
+We simulate the experiment in which participants pick between two choices in each trial. 
+These two choices have constant and proportional reward probabilities (e.g. if `p(choice_1) = 0.75`, then `p(choice_2) = 0.25`) and symmetrical negative/positive feedback. 
 The agent implicitly learns these reward probabilities by attributing values to the two choices;
 Value, or expectation of reward on next trial if choice c is picked, is updated each trial following:
 
@@ -35,7 +35,7 @@ We simulate data for two conditions:
 2) `alpha = 0.8`
 
 While having fixed reward probability: `p(choice_1) = 0.75` and `p(choice_2) = 0.25`;
-And fixed temperature `tau = 0.5` (value is non-deterministic in making choice). The agent plays for 10000 in each of the two conditions, giving a total of 20000 trials. 
+And fixed temperature `tau = 0.5` (value is non-deterministic in making a choice). The agent plays for 10000 trias in each of the two conditions, giving a total of 20000 simulated trials in the dataset. 
 
 The agents chooses an option following the decision rule described above, and updates its value of that choice based on the learning rate. Learning rates were set to 0.8 for condition 1, and 0.6 for condition 2. The agent's belief of the reward probability of option 1 under each of the two conditions can be seen below:
 
@@ -48,34 +48,34 @@ Clearly, the agent is updating the expected value of the option too much for bot
 
 ## Parameter recovery model
 
-We fit a model on the simulated data, aiming to recover the alpha- and tau values used in data generation. In order to estimate the required number of trials to correctly recover the parameters, we fit multiple models using subsets of the data of varying length (stopping after seeing the first n trials from each condition, with n = 50, 100, 250, 500, 1000, 2500, 5000, 10000). 
+For the first part of this assignment, we fit a model on the simulated data, aiming to recover the alpha- and tau values used in data generation. In order to estimate the required number of trials to correctly recover the parameters, we fit multiple models using subsets of the data of varying length (stopping after seeing the first n trials from each condition, with n = 50, 100, 250, 500, 1000, 2500, 5000, 10000). 
 
-We use the following model formulation:  
+We use the following priors when formulating the model:  
 
 ![eq3](https://latex.codecogs.com/svg.image?Prior_{\alpha}&space;\sim&space;Normal(1,&space;1))
-<!--$$ Prior_{\alpha} \sim Normal(1, 1) $$--> 
+<!--$$ Prior_{\alpha} \sim Normal(0.5, 0.5) $$--> 
 ![eq4](https://latex.codecogs.com/svg.image?\alpha_1&space;\sim&space;Normal_{lpdf}(\alpha_1&space;|&space;Prior_{\alpha}))
 <!--$$ \alpha_1 \sim Normal_{lpdf}(\alpha_1 | Prior_{\alpha}) $$--> 
 ![eq5](https://latex.codecogs.com/svg.image?\alpha_2&space;\sim&space;Normal_{lpdf}(\alpha_2&space;|&space;Prior_{\alpha}))
 <!--$$ \alpha_2 \sim Normal_{lpdf}(\alpha_2 | Prior_{\alpha}) $$--> 
 
 ![eq6](https://latex.codecogs.com/svg.image?Prior_{\tau}&space;\sim&space;Normal(0,&space;20))
-<!--$$ Prior_{\tau} \sim Normal(0, 20) $$--> 
+<!--$$ Prior_{\tau} \sim Normal(0, 10) $$--> 
 ![eq7](https://latex.codecogs.com/svg.image?\tau&space;\sim&space;Normal_{lpdf}(\tau&space;|&space;Prior_{\tau}))
 <!--$$ \tau \sim Normal_{lpdf}(\tau | Prior_{\tau}) $$--> 
 
 
 
-From here, we sample alphas from different model fits, increasing the length of data subset (or n trials) over time:  
-
+From here, we sample posterior alpha estimates from different model fits, increasing the length of data subset (or n trials) over time:  
+rate in condition 1 
 <img src="fig/alpha_estimates.png" alt="alpha_estimates" width="600"/>  
 
 
-From the figure above, we argue that reasonable estimations of learning rate does not happen until around 10000 trials (5000 of each condition). We also notice that estimations of learning rate in condition 2 (`alpha = 0.8`) take form earlier than estimations of learning rate in condition 1 (`alpha = 0.6`). This indicates that higher learning rates are easier to detect, presumably because that leads to a more drastic effect on agent belief and behavior. We would therefore expect that an even higher number of trials would be necessary to recover a learning rate of 0.4. 
+From the figure above, we argue that reasonable estimations of learning rate does not happen until around 5000 trials (2500 of each condition). At this stage, both alpha parameters seem to be estimated with reasonable accuracy despite all models underestimating alpha for condition 2. Peculiarly, estimation of the learning rate in condition 2 (`alpha = 0.8`) seems to start worsening when using 10000 trials, which is thus also an argument for stopping at 5000 trials. It appears that precise estimations of the learning rate for condition (`alpha = 0.6`) take form earlier that for conditions 2. This is presumably due to the true posterior for this condition more closely resembles the passed prior. Logically, one could contrarily expect a model to recover a higher learning faster as such a rate would leads to a more drastic effect on agent belief and behavior.
 
-Below, we provide the model summary after 10000 trials where we see that the estimates for the two learning rates and the temperature are fairly close to the true values at this point:
 ![summary](fig/summary.png)
 
+Note that since STAN's sampler has a hard time dealing with hard constraints when sampling parameters values, we transform the parameters into a conceptually meaningful space (between 0 and 1 (except for tau)) using the inverse_logit function when fitting the models to help recover the best estimations. The generated estimates are re-transformed when extracted from the fitted model.
 
 ## Model quality checks
 #### Markov chains
@@ -85,17 +85,14 @@ Below we visualise trace plots of the Markov chains. We see that the chains are 
 <img src="fig/chains_a1.png" alt="chains" width="600"/>
 <img src="fig/chains_a2.png" alt="chains" width="600"/>
 
+Thus, we conclude that model fitting was succesfully excecuted. This is also confirmed by the fact that no prior/posterior distributions seem to have any unexpected tails or peaks.
 
 #### Prior-posterior updates
+This below figure shows the shows prior(red)-posterior(blue) update for the the parameters alpha1, alpha2 and tau when fitting a model using 2500 trials for each condition. The parameters are estimated by the model based on the priors we set. We see that for both alphas, the posterior has narrowed (thus, more certain) and moved closer to the true rates. Furthermore, the priors do not seem to have constrained estimation of the posteriors. This strenghtens our belief in that the model has successfully fitted to the data. Tau seems to have converged close to perfectly on the true value (0.5). The tau prior distribution looks weird due to the - perhaps unwarranted - transformation but this does not seem to have had any effect on the outcome.
+
 ![pp update](fig/pp_checks_alpha.png)
-This figure shows prior(red)-posterior(blue) update checks for the the parameters alpha1 and alpha2. The parameters are estimated by the model based on the priors we set. We see that for both alphas, the posterior is quite narrow and certain around the true alpha (blue line) even given the very wide prior. This increases our belief in that the model has been successfully fitted to the data.
 
-
-## Concerns
-We have a few concerns about the results we get from our analysis. 10000 trials seem like a very large number needed to successfully recover the parameters. This is also not a feasible amount of trials to expect a participant to go through in an experimental setting. We suspect that we have made some bad assumptions or errors in our modeling. We tried with different priors and found the chosen ones to make most sense. We also experimented with transformations to and from log-odds space. In the plots below, we have tried using inv_logit on the parameters and priors (as seen in the model_invlogit.stan script). This, however, seems to yield less certain posteriors and worse estimates for alpha1 (0.43) and tau (0.12), whereas alpha2 is ok (0.76). The priors also look concerning in the prior-posterior updates, which might explain parts of why the alpha1 estimates are bad. In general, we have some difficulties conceptualizing when it makes sense to transform the parameters and were wondering if you had any feedback or general tips on transformations and log-odds.
-
-![pp update invlogit](fig/pp_checks_alpha_invlogit.png)
-
+Below, we provide the alpha estimates generated fromm the model summary after 5000 trials. Though the difference between the estimates is not exactly equal to the true difference of 0.2, both parameters have moved significantly towards their true rates.
 
 
 # Part 2
