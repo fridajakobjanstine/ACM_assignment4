@@ -110,10 +110,12 @@ The plot below shows the gradual evolutions of the alpha parameter estimates fro
 
 ![pp_evolution_gif](fig/animation.gif)
 
-The plots reveal that
+The plots nicely display, the incremental improvements from session to session in especially the estimation of alpha 2. All three experimental designs shows this process, but - as expected - the design including 500 trials (essentially only 250 trials per condition) for 8 sessions ends up estimating the true rates with the highest precision. The table below shows the mean estimates and, when compared to the original model from part 1 fitting on 5000 trials, it can be observed that this iterated approach indeed yields better estimates despite fitting on fewer trials.
 
 | Parameter | Mean estimate |  
 | --- | --- | 
 Alpha 1 | 0.605 |
 Alpha 2 | 0.760 | 
 Tau | 0.508 | 
+
+250 trials in one sitting is, however, would still be a tiresome experience for most participants and probably unrealistic to get participants to undergo on e.g. a phone app without immense gamification of the task. Though this was the design yielding best parameter recovery, the design that demands only 50 trials per session still manages to capture the true parameters to a fairly good extent. We argue that such a framework would likely be more realistic to implement. Furthermore, a model fitting to smaller bundles of trials would presumably be better at flexibly adapting to variance or changes in learning rates between sessions (which was not included for this project), which also speaks in favour of such a design.
