@@ -105,9 +105,7 @@ To produce an iterated design, we simulate a study in which a participant goes t
 
 By running this on the same simulated data as described above we see that....... 
 
-** COMMENT ON TRADE-OFF BETWEEN N_TRIALS AND N_SESSIONS **
-
-** ANIMATED DENSITY PLOTS ** 
+![pp_evolution_gif](fig/animation.2.gif)
 
 
 With this approach, we are assuming that there is no variance across sessions for the participant, i.e. that the values for alpha and tau remain fixed between sessions. In a real-life experimental study, one could expect the participant to not remember the exact values he/she has assigned to each choice in the last session upon beginning the next session. For simplicity, our model does not take this into account. However, for future studies some noise could have been added between sessions to circumvent this.
