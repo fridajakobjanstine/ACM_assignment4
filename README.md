@@ -73,8 +73,6 @@ rate in condition 1
 
 From the figure above, we argue that reasonable estimations of learning rate does not happen until around 5000 trials (2500 of each condition). At this stage, both alpha parameters seem to be estimated with reasonable accuracy despite all models underestimating alpha for condition 2. Peculiarly, estimation of the learning rate in condition 2 (`alpha = 0.8`) seems to start worsening when using 10000 trials, which is thus also an argument for stopping at 5000 trials. It appears that precise estimations of the learning rate for condition (`alpha = 0.6`) take form earlier that for conditions 2. This is presumably due to the true posterior for this condition more closely resembles the passed prior. Logically, one could contrarily expect a model to recover a higher learning faster as such a rate would leads to a more drastic effect on agent belief and behavior.
 
-![summary](fig/summary.png)
-
 Note that since STAN's sampler has a hard time dealing with hard constraints when sampling parameters values, we transform the parameters into a conceptually meaningful space (between 0 and 1 (except for tau)) using the inverse_logit function when fitting the models to help recover the best estimations. The generated estimates are re-transformed when extracted from the fitted model.
 
 ## Model quality checks
@@ -94,6 +92,12 @@ This below figure shows the shows prior(red)-posterior(blue) update for the the 
 
 Below, we provide the alpha estimates generated fromm the model summary after 5000 trials. Though the difference between the estimates is not exactly equal to the true difference of 0.2, both parameters have moved significantly towards their true rates.
 
+| Parameter | Mean estimate |  
+| --- | --- | 
+Alpha 1 | 0.614 |
+Alpha 2 | 0.746 | 
+Tau | 0.507 | 
+
 
 # Part 2
 
@@ -107,3 +111,8 @@ By running this on the same simulated data as described above we see that.......
 
 With this approach, we are assuming that there is no variance across sessions for the participant, i.e. that the values for alpha and tau remain fixed between sessions. In a real-life experimental study, one could expect the participant to not remember the exact values he/she has assigned to each choice in the last session upon beginning the next session. For simplicity, our model does not take this into account. However, for future studies some noise could have been added between sessions to circumvent this.
 
+| Parameter | Mean estimate |  
+| --- | --- | 
+Alpha 1 | 0.605 |
+Alpha 2 | 0.760 | 
+Tau | 0.508 | 
