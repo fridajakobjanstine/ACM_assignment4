@@ -102,14 +102,15 @@ Tau | 0.507 |
 # Part 2
 
 ## Iterated design
-To produce an iterated design, we simulate a study in which a participant goes through the trials in different sessions (e.g. 5 session with 20 trials in each). We use the same models as described above, however, to accommodate the iterated study design we use a different approach for setting the priors. The first session is initialized with the same priors as outlined earlier. After each session, we save the mean and standard deviation of the estimated alphas and tau. In the next session, these values are then used for the priors for alpha1, alpha2, and tau, assuming normally distributed priors and posteriors. 
+2500 trials is a very large number of trials and would be unmanageable for a participant to complete in one sitting. Hence, for part 2 of the assignment, we conceptualtise and test out a framework where participants can complete fewer trials over multiple sessions To produce an iterated design, we simulate a study in which a participant goes through the trials in different sessions (e.g. 5 session with 20 trials in each). We use the same models as described above, however, to accommodate the iterated study design we use a different approach for setting the priors. The first session is initialized with the same priors as outlined earlier. After each session, we save the mean and standard deviation of the estimated alphas and tau. In the next session, these values are then used for the priors for alpha1, alpha2, and tau, assuming normally distributed priors and posteriors (for a future study, this assumption should be checked and validated for each iteration - or alternatively, the actual raw prior distribution should be passed). 
 
-By running this on the same simulated data as described above we see that....... 
+We expect this approach to yield a trade off between participant comfortabilty and precision of parameter recovery; the more fewer the number of trials per sessions, the easier and more comfortable it would be to participate in such a study, however, higher number of trials per session should give better estimaetes. To explore this trade off and recover the optimal middleground, we run a model fitting loop on 4000 trials (2000 trials per condition) using 3 different trials/session-ratios: 40 sessions with 100 trials in each, 16 sessions with 250 trials and 8 sessions with 500 trials. During this exlporation, we are assuming that there is no variance across sessions for the participant, i.e. that the values for alpha and tau remain fixed between sessions. In a real-life experimental study, one could expect the participant to not remember the exact values he/she has assigned to each choice in the last session upon beginning the next session. For simplicity, our model does not take this into account. However, for future studies some noise could have been added between sessions to circumvent this.
+
+The plot below shows the gradual evolutions of the alpha parameter estimates from session to session during the posterior passing model fitting loop for all three different experimental designs:
 
 ![pp_evolution_gif](fig/animation.gif)
 
-
-With this approach, we are assuming that there is no variance across sessions for the participant, i.e. that the values for alpha and tau remain fixed between sessions. In a real-life experimental study, one could expect the participant to not remember the exact values he/she has assigned to each choice in the last session upon beginning the next session. For simplicity, our model does not take this into account. However, for future studies some noise could have been added between sessions to circumvent this.
+The plots reveal that
 
 | Parameter | Mean estimate |  
 | --- | --- | 
