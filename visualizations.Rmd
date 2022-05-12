@@ -133,24 +133,26 @@ ggsave("fig/chains_a2.png", p_chains_a2, width = 10, height=8)
 
 Alpha estimation development
 ```{r}
-p_recovery = recovery_df %>%
-  pivot_longer(cols=c(alpha1_est, alpha2_est)) %>%
-  ggplot(aes(value, color=name)) +
-  geom_density() +
-  facet_wrap(~n_trials/2) +
-  theme_classic()
+p_recovery <- ggplot(recovery_df) +
+  geom_density(aes(alpha1_est), fill='blue', alpha=0.4) + 
+  geom_density(aes(alpha2_est), fill='red', alpha=0.4) + 
+  geom_vline(xintercept = 0.6, color='blue') + 
+  geom_vline(xintercept = 0.8, color='red') +
+  theme_classic() + facet_wrap(.~n_trials) + 
+  labs(x='Alpha estimate', y='Density', title='Estimation of alpha parameters by number of trials')
+
+p_recovery
 
 ggsave("fig/alpha_estimates.png", p_recovery, width = 10, height=8)
 ```
 
 ```{r}
-recovery_df %>%
+recovery_df %>% 
   filter(n_trials == 100) %>%
   pivot_longer(cols=c(alpha1_est, alpha2_est)) %>%
   ggplot(aes(value, color=name)) +
   geom_density()
   
-
 ```
 
 Prior/posterior updates
@@ -158,31 +160,171 @@ Prior/posterior updates
 dd <- read.csv("dat/downsampled_draws_df.csv")
 dd <- downsampled_draws_df
 pp_1 <- dd %>% ggplot() +
-  geom_density(aes(alpha1), fill="blue", alpha=0.3)+
+  geom_density(aes(alpha1_trans), fill="blue", alpha=0.3)+
   geom_density(aes(alpha1_prior), fill="red", alpha=0.3)+
   geom_vline(xintercept = 0.6, 
                 color = "blue", size=0.75) +
   labs(x="Alpha", y="Density", title = "Prior posterior update for alpha 1")+
-  theme_classic()
+  theme_classic()+
+  theme(title = element_text(size = 8))
 
 pp_2 <- dd %>% ggplot() +
-  geom_density(aes(alpha2), fill="blue", alpha=0.3)+
+  geom_density(aes(alpha2_trans), fill="blue", alpha=0.3)+
   geom_density(aes(alpha2_prior), fill="red", alpha=0.3)+
   geom_vline(xintercept = 0.8, 
                 color = "blue", size=0.75) +
   labs(x="Alpha", y="Density", title = "Prior posterior update for alpha 2")+
-  theme_classic()
+  theme_classic()+
+  theme(title = element_text(size = 8))
 
 pp_3 <- dd %>% ggplot() +
-  geom_density(aes(tau), fill="blue", alpha=0.3)+
+  geom_density(aes(inv.logit(tau)*20), fill="blue", alpha=0.3)+
   geom_density(aes(tau_prior), fill="red", alpha=0.3)+
   labs(x="Alpha", y="Density", title = "Prior posterior update for tau")+
-  theme_classic()
+  theme_classic()+
+  theme(title = element_text(size = 8))
 
 
-pp_checks <- pp_1 + pp_2
+pp_checks <- pp_1 + pp_2 + pp_3
+
+pp_checks
 
 ggsave("fig/pp_checks_alpha.png", pp_checks, width = 14, height=8)
 
 ```
 
+#### GGANMIMATIONS for part 2 ####
+```{r}
+## ANIMATION - 50 trials for 20 sessions
+# extract subset of dataframe
+library(ggplot2)
+devtools::install_github("thomasp85/transformr")
+library(gganimate)
+
+df_100_10 <- recovery_df2 %>% subset(trials==100) 
+
+alpha1_100_10 <- ggplot(df_100_10, aes(x = alpha1_est, fill = factor(sess))) +
+  geom_density(alpha = .5) +
+  transition_time(sess) +
+  ease_aes('cubic-in-out') +
+  labs(title='Evolution of alpha posterior densities over sessions', x = "Alpha  (condition 1)", y = "Density", subtitle='40 sessions with 100 trials') +
+  shadow_mark(alpha = alpha/4, color = alpha("grey", .25)) +
+  guides(fill = 'none') +
+  theme_classic() +
+  geom_vline(xintercept = 0.6, color='black') +
+  theme(title = element_text(size = 14),
+        axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14))
+
+a1_100_40 <- animate(alpha1_100_10, fps = 5, duration = 10, width = 600, height = 450, rewind = F, end_pause=10, renderer = magick_renderer())
+
+alpha2_100_10 <- ggplot(df_100_10, aes(x = alpha2_est, fill = factor(sess))) +
+  geom_density(alpha = .5) +
+  transition_time(sess) +
+  ease_aes('cubic-in-out') +
+  labs(title='Evolution of alpha posterior densities over sessions', x = "Alpha (condition 2)", y = "Density", subtitle='40 sessions with 100 trials') +
+  shadow_mark(alpha = alpha/4, color = alpha("grey", .25)) +
+  guides(fill = 'none') +
+  theme_classic() +
+  geom_vline(xintercept = 0.8, color='black') +
+  theme(title = element_text(size = 14),
+        axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14))
+
+a2_100_40 <- animate(alpha2_100_10, fps = 5, duration = 10, width = 600, height = 450, rewind = F, end_pause=10, renderer = magick_renderer())
+```
+
+```{r}
+## ANIMATION - 50 trials for 20 sessions
+# extract subset of dataframe
+df_250_8 <- recovery_df2 %>% subset(trials==250) 
+
+alpha1_250_8 <- ggplot(df_250_8, aes(x = alpha1_est, fill = factor(sess))) +
+  geom_density(alpha = .5) +
+  transition_time(sess) +
+  ease_aes('cubic-in-out') +
+  labs(title='Evolution of alpha posterior densities over sessions', x = "Alpha  (condition 1)", y = "Density", subtitle='16 sessions with 250 trials') +
+  shadow_mark(alpha = alpha/4, color = alpha("grey", .25)) +
+  guides(fill = 'none') +
+  theme_classic() +
+  geom_vline(xintercept = 0.6, color='black') +
+  theme(title = element_text(size = 14),
+        axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14))
+
+a1_250_16 <- animate(alpha1_250_8, fps = 5, duration = 10, width = 600, height = 450, rewind = F, end_pause=10, renderer = magick_renderer())
+
+alpha2_250_8 <- ggplot(df_250_8, aes(x = alpha2_est, fill = factor(sess))) +
+  geom_density(alpha = .5) +
+  transition_time(sess) +
+  ease_aes('cubic-in-out') +
+  labs(title='Evolution of alpha posterior densities over sessions', x = "Alpha (condition 2)", y = "Density", subtitle='16 sessions with 250 trials') +
+  shadow_mark(alpha = alpha/4, color = alpha("grey", .25)) +
+  guides(fill = 'none') +
+  theme_classic() +
+  geom_vline(xintercept = 0.8, color='black') +
+  theme(title = element_text(size = 14),
+        axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14))
+
+a2_250_16 <- animate(alpha2_250_8, fps = 5, duration = 10,width = 600, height = 450, rewind = F, end_pause=10, renderer = magick_renderer())
+```
+
+```{r}
+## ANIMATION - 50 trials for 20 sessions
+# extract subset of dataframe 
+df_500_4 <- recovery_df2 %>% subset(trials==500) 
+
+alpha1_500_4<- ggplot(df_500_4, aes(x = alpha1_est, fill = factor(sess))) +
+  geom_density(alpha = .5) +
+  transition_time(sess) +
+  ease_aes('cubic-in-out') +
+  labs(title='Evolution of alpha posterior densities over sessions', x = "Alpha  (condition 1)", y = "Density", subtitle='8 sessions with 500 trials') +
+  shadow_mark(alpha = alpha/4, color = alpha("grey", .25)) +
+  guides(fill = 'none') +
+  theme_classic() +
+  geom_vline(xintercept = 0.6, color='black') +
+  theme(title = element_text(size = 14),
+        axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14))
+
+a1_500_8 <- animate(alpha1_500_4, fps = 5, duration = 10, width = 600, height = 450, rewind = F, end_pause=10, renderer = magick_renderer())
+
+alpha2_500_4 <- ggplot(df_500_4, aes(x = alpha2_est, fill = factor(sess))) +
+  geom_density(alpha = .5) +
+  transition_time(sess) +
+  ease_aes('cubic-in-out') +
+  labs(title='Evolution of alpha posterior densities over sessions', x = "Alpha (condition 2)", y = "Density", subtitle='8 sessions with 500 trials') +
+  shadow_mark(alpha = alpha/4, color = alpha("grey", .25)) +
+  guides(fill = 'none') +
+  theme_classic() +
+  geom_vline(xintercept = 0.8, color='black') +
+  theme(title = element_text(size = 14),
+        axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14))
+
+a2_500_8 <- animate(alpha2_500_4, fps = 5, duration = 10, width = 600, height = 450, rewind = F, end_pause=10, renderer = magick_renderer())
+
+```
+
+```{r}
+library(magick)
+
+i=1
+combi100 <- image_append(c(a1_100_40[i], a2_100_40[i]))
+combi250 <- image_append(c(a1_250_16[i], a2_250_16[i]))
+combi500 <- image_append(c(a1_500_8[i], a2_500_8[i]))
+new_gif <- image_append(c(combi100,combi250, combi500), stack=TRUE)
+new_gif
+
+for(i in 2:50){
+  combi100 <- image_append(c(a1_100_40[i], a2_100_40[i]))
+  combi250 <- image_append(c(a1_250_16[i], a2_250_16[i]))
+  combi500 <- image_append(c(a1_500_8[i], a2_500_8[i]))
+  fullcombined <- image_append(c(combi100,combi250, combi500), stack=TRUE)
+  new_gif <- c(new_gif, fullcombined)
+}
+
+
+image_write(new_gif, format="gif", path="dat/animation.2.gif")
+```

@@ -16,9 +16,9 @@ transformed data {
 }
 
 parameters { //Things we estimate
-  real<lower=0, upper=1> alpha1; // learning rate
-  real<lower=0, upper=1> alpha2; // learning rate
-  real<lower=0, upper=20> tau; // softmax inv. temp
+  real alpha1; // learning rate
+  real alpha2; // learning rate
+  real tau; // softmax inv. temp
 }
 
 model {
@@ -29,14 +29,14 @@ model {
   //target += uniform_lpdf(alpha1 | 0,1); // TERRIBLE PRIORS
   //target += uniform_lpdf(alpha2 | 0,1);
   //target += uniform_lpdf(tau | 0,20);
-  target += normal_lpdf(logit(alpha1) | alpha1_prior_vals[1], alpha1_prior_vals[2]); 
-  target += normal_lpdf(logit(alpha2) | alpha2_prior_vals[1], alpha2_prior_vals[2]);
+  target += normal_lpdf(alpha1 | alpha1_prior_vals[1], alpha1_prior_vals[2]); 
+  target += normal_lpdf(alpha2 | alpha2_prior_vals[1], alpha2_prior_vals[2]);
   target += normal_lpdf(tau | tau_prior_vals[1], tau_prior_vals[2]);
   
   value = initValue;
   
   for (t in 1:trials){
-    theta = softmax(inv_logit(tau) * value); //action probability computed via softmax
+    theta = softmax(inv_logit(tau)*20 * value); //action probability computed via softmax
     target += categorical_lpmf(choice[t] | theta);
     
     pe = feedback[t] - value[choice[t]]; //compute pe for chosen value only
@@ -53,6 +53,9 @@ generated quantities {
   real alpha1_prior; //<lower=0, upper=1>
   real alpha2_prior; //<lower=0, upper=1>
   real tau_prior; //<lower=0, upper=20>
+  real<lower=0, upper=1> alpha1_trans;
+  real<lower=0, upper=1> alpha2_trans;
+  real<lower=0> tau_trans;
 
   vector[2] theta; 
   real pe;
@@ -74,8 +77,12 @@ generated quantities {
   //tau_prior = uniform_rng(0,20);  
   alpha1_prior = inv_logit(normal_rng(alpha1_prior_vals[1],alpha1_prior_vals[2]));
   alpha2_prior = inv_logit(normal_rng(alpha2_prior_vals[1],alpha2_prior_vals[2]));
-  tau_prior = inv_logit(normal_rng(tau_prior_vals[1],tau_prior_vals[2]));
+  tau_prior = inv_logit(normal_rng(tau_prior_vals[1],tau_prior_vals[2]))*20;
   
+  alpha1_trans = inv_logit(alpha1);
+  alpha2_trans = inv_logit(alpha2);
+  tau_trans = inv_logit(tau)*20;
+
   value = initValueGen;
   log_lik = 0;
   
